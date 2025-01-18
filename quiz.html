@@ -84,3 +84,35 @@
     </script>
 </body>
 </html>
+document.addEventListener("DOMContentLoaded", () => {
+    fetch("http://localhost:3000/quiz")
+        .then((response) => response.json())
+        .then((data) => {
+            const quizContainer = document.querySelector(".quiz-container");
+
+            data.forEach((question, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+
+                const questionText = document.createElement("p");
+                questionText.textContent = ${index + 1}. ${question.question};
+                questionDiv.appendChild(questionText);
+
+                for (let i = 1; i <= 4; i++) {
+                    const optionLabel = document.createElement("label");
+                    const optionInput = document.createElement("input");
+                    optionInput.type = "radio";
+                    optionInput.name = q${question.id};
+                    optionInput.value = i;
+                    optionLabel.appendChild(optionInput);
+                    optionLabel.append(` ${question[option${i}]}`);
+                    questionDiv.appendChild(optionLabel);
+                }
+
+                quizContainer.appendChild(questionDiv);
+            });
+        })
+        .catch((error) => {
+            console.error("Error fetching quiz questions:", error);
+        });
+});
